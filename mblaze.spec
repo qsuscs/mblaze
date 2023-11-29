@@ -5,7 +5,7 @@ Summary:        Unix utilities to deal with Maildir
 
 License:        CC0 and MIT
 URL:            https://github.com/leahneukirchen/mblaze
-Source0:        {name}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  sed
