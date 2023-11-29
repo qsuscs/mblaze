@@ -1,6 +1,6 @@
 Name:           mblaze
 Version:        1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Unix utilities to deal with Maildir
 
 License:        CC0 and MIT
@@ -11,10 +11,12 @@ BuildRequires:  gcc
 BuildRequires:  sed
 
 Requires: less
+Suggests: %{name}-contrib
 
 %package contrib
 Summary: Additional utilities for mblaze
 BuildArch: noarch
+Requires: %{name} = %{version}-%{release}
 
 Requires: /usr/bin/awk
 # mopenall
@@ -79,8 +81,8 @@ for i in *; do
         ;;
     esac
 done
-install -D -m0644 _mblaze %{?buildroot}%{_datadir}/zsh/site-functions
-echo "%%{_datadir}/zsh/site-functions" >> _files
+install -D -m0644 -t %{?buildroot}%{_datadir}/zsh/site-functions _mblaze
+echo "%%{_datadir}/zsh/site-functions/_mblaze" >> _files
 popd
 
 
@@ -97,5 +99,9 @@ popd
 %{nil}  # all in contrib/_files
 
 %changelog
+* Wed Nov 29 2023 Thomas Schneider <qsx@chaotikum.eu> - 1.2-2
+- Fix zsh completion install
+- Create dependency chain between base and contrib package
+
 * Tue May 10 2022 Thomas Schneider <qsx@chaotikum.eu> - 1.2-1
 - Initial packaging
