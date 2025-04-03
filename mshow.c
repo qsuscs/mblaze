@@ -159,10 +159,10 @@ mime_filename(struct message *msg)
 	char *v;
 	char *filename = 0;
 
-	if ((v = blaze822_hdr(msg, "content-disposition"))) {
-		if (blaze822_mime2231_parameter(v, "filename",
-		    buf, sizeof buf, "UTF-8"))
-			filename = buf;
+	if ((v = blaze822_hdr(msg, "content-disposition")) &&
+	    blaze822_mime2231_parameter(v, "filename",
+	    buf, sizeof buf, "UTF-8")) {
+		filename = buf;
 	} else if ((v = blaze822_hdr(msg, "content-type"))) {
 		if (blaze822_mime2231_parameter(v, "name",
 		    buf, sizeof buf, "UTF-8"))
@@ -808,7 +808,7 @@ main(int argc, char *argv[])
 
 	xpledge("stdio rpath wpath cpath proc exec", NULL);
 
-	if (!rflag && !xflag && !Oflag && !Rflag)
+	if (!rflag && !xflag && !Oflag && !Rflag && !tflag)
 		safe_output = 1;
 
 	if (safe_output && isatty(1)) {

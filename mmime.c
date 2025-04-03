@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -346,7 +347,7 @@ print_header(char *line) {
 		if (!highbit) {
 			if (e-s >= 998)
 				goto force_qp;
-			if (e-s >= 78 - linelen) {
+			if (e-s >= 78 - linelen && linelen > 0) {
 				// wrap in advance before long word
 				printf("\n");
 				linelen = 0;
@@ -517,6 +518,7 @@ check()
 	off_t linelen = 0;
 	off_t maxheadlinelen = 0;
 	off_t maxbodylinelen = 0;
+	off_t bodylinelenlimit = getenv("MBLAZE_RELAXED_MIME") ? 998 : 78;
 
 	int c;
 	int l = -1;
@@ -554,7 +556,7 @@ check()
 	}
 
 	if (bitlow == 0 && bithigh == 0 &&
-	    maxheadlinelen < 998 && maxbodylinelen <= 78 &&
+	    maxheadlinelen < 998 && maxbodylinelen <= bodylinelenlimit &&
 	    l == '\n')
 		return 0;
 	else

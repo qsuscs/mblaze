@@ -1,6 +1,9 @@
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 700
 #endif
+#ifdef __sun
+#define __EXTENSIONS__ /* to get TIOCGWINSZ */
+#endif
 
 #include "xpledge.h"
 
@@ -19,6 +22,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <wchar.h>
+#include <termios.h>
 
 #include "blaze822.h"
 #include "u8decode.h"
@@ -318,7 +322,7 @@ oneline(char *file)
 	}
 
 	struct message *msg = blaze822(file);
-	char *flags = msg ? strstr(file, ":2,") : 0;
+	char *flags = msg ? strstr(file, MAILDIR_COLON_SPEC_VER_COMMA) : 0;
 	if (!flags)
 		flags = "";
 	else
@@ -571,9 +575,13 @@ main(int argc, char *argv[])
 
 	struct winsize w;
 	int ttyfd = open("/dev/tty", O_RDONLY | O_NOCTTY);
-	if (ttyfd >= 0 && ioctl(ttyfd, TIOCGWINSZ, &w) == 0) {
-		cols = w.ws_col;
+	if (ttyfd >= 0) {
+		if (ioctl(ttyfd, TIOCGWINSZ, &w) == 0)
+			cols = w.ws_col;
+		close(ttyfd);
+	}
 
+	if (isatty(1)) {
 		char *pg;
 		pg = getenv("MBLAZE_PAGER");
 		if (!pg)
@@ -586,8 +594,6 @@ main(int argc, char *argv[])
 				    pg, strerror(errno));
 		}
 	}
-	if (ttyfd >= 0)
-		close(ttyfd);
 
 	xpledge("stdio rpath", "");
 

@@ -58,14 +58,14 @@ list(char *prefix, char *file)
 	if (flagset || iflag) {
 		size_t prefixlen;
 
-		f = strstr(file, ":2,");
+		f = strstr(file, MAILDIR_COLON_SPEC_VER_COMMA);
 
 		if (!f &&
 		    prefix &&
 		    (prefixlen = strlen(prefix)) &&
 		    prefixlen >= 4 &&
 		    strcmp(prefix + prefixlen - 4, "/new") == 0)
-			f = ":2,";
+			f = MAILDIR_COLON_SPEC_VER_COMMA;
 	}
 
 	if (flagset) {
@@ -111,8 +111,8 @@ list(char *prefix, char *file)
 #include <sys/syscall.h>
 
 struct linux_dirent64 {
-	ino64_t d_ino;           /* 64-bit inode number */
-	off64_t d_off;           /* 64-bit offset to next structure */
+	uint64_t d_ino;          /* 64-bit inode number */
+	int64_t d_off;           /* 64-bit offset to next structure */
 	unsigned short d_reclen; /* Size of this dirent */
 	unsigned char d_type;    /* File type */
 	char d_name[];           /* Filename (null-terminated) */
