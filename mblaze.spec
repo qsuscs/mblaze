@@ -1,6 +1,6 @@
 Name:           mblaze
-Version:        1.2
-Release:        2%{?dist}
+Version:        1.3
+Release:        1%{?dist}
 Summary:        Unix utilities to deal with Maildir
 
 License:        CC0 and MIT
@@ -99,6 +99,8 @@ popd
 %{nil}  # all in contrib/_files
 
 %changelog
+* Thu Apr 03 2025 Thomas Schneider <qsx@chaotikum.eu> 1.3-1
+- New upstream release
 * Wed Nov 29 2023 Thomas Schneider <qsx@chaotikum.eu> - 1.2-2
 - Fix zsh completion install
 - Create dependency chain between base and contrib package
